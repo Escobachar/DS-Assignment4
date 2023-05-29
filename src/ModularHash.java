@@ -11,29 +11,38 @@ public class ModularHash implements HashFactory<Integer> {
     }
 
     public class Functor implements HashFunctor<Integer> {
-        final private int a;
-        final private int b;
-        final private long p;
-        final private int m;
+        //final private int a;
+        //final private int b;
+        //final private long p;
+        //final private int m;
         @Override
         public int hash(Integer key) {
             throw new UnsupportedOperationException("Replace this by your implementation");
         }
 
         public int a() {
-            return a;
+
+            throw new UnsupportedOperationException("Replace this by your implementation");
+
+            //return a;
         }
 
         public int b() {
-            return b;
+            throw new UnsupportedOperationException("Replace this by your implementation");
+
+            //return b;
         }
 
         public long p() {
-            return p;
+            throw new UnsupportedOperationException("Replace this by your implementation");
+
+            //return p;
         }
 
         public int m() {
-            return m;
+            throw new UnsupportedOperationException("Replace this by your implementation");
+
+            //return m;
         }
     }
 }

@@ -1,6 +1,12 @@
 public class SkipListExperimentUtils {
+
     public static double measureLevels(double p, int x) {
-        throw new UnsupportedOperationException("Replace this by your implementation");
+        AbstractSkipList list = new IndexableSkipList(p);
+        int sum = 0;
+        for (int i = 0; i < x; i++) {
+            sum += list.generateHeight();
+        }
+        return (double) (sum/x)+1;
     }
 
     /*
@@ -28,6 +34,12 @@ public class SkipListExperimentUtils {
     }
 
     public static void main(String[] args) {
-        System.exit(1); // Remove this line.
+        int[] x = {10,100,1000,10000};
+        double[] p = {0.33, 0.5, 0.75, 0.9};
+        for (int i = 0; i < x.length ; i++) {
+            for (int j = 0; j < p.length; j++) {
+                System.out.println("x = " + x[i] + " p = " + p[j] + " average levels: " + measureLevels(p[j],x[i]) + " expected: " + (int)(1/p[j]));
+            }
+        }
     }
 }

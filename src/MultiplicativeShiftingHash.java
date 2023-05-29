@@ -12,8 +12,8 @@ public class MultiplicativeShiftingHash implements HashFactory<Long> {
 
     public class Functor implements HashFunctor<Long> {
         final public static long WORD_SIZE = 64;
-        final private long a;
-        final private long k;
+       // final private long a;
+        //final private long k;
 
         @Override
         public int hash(Long key) {
@@ -21,11 +21,15 @@ public class MultiplicativeShiftingHash implements HashFactory<Long> {
         }
 
         public long a() {
-            return a;
+            throw new UnsupportedOperationException("Replace this by your implementation");
+
+            //return a;
         }
 
         public long k() {
-            return k;
+            throw new UnsupportedOperationException("Replace this by your implementation");
+
+            //return k;
         }
     }
 }

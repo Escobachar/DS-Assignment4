@@ -12,9 +12,9 @@ public class StringHash implements HashFactory<String> {
     }
 
     public class Functor implements HashFunctor<String> {
-        final private HashFunctor<Integer> carterWegmanHash;
-        final private int c;
-        final private int q;
+     //   final private HashFunctor<Integer> carterWegmanHash;
+       // final private int c;
+        //final private int q;
 
         @Override
         public int hash(String key) {
@@ -22,15 +22,21 @@ public class StringHash implements HashFactory<String> {
         }
 
         public int c() {
-            return c;
+          //  return c;
+            throw new UnsupportedOperationException("Replace this by your implementation");
+
         }
 
         public int q() {
-            return q;
+            //return q;
+            throw new UnsupportedOperationException("Replace this by your implementation");
+
         }
 
         public HashFunctor carterWegmanHash() {
-            return carterWegmanHash;
+            //return carterWegmanHash;
+            throw new UnsupportedOperationException("Replace this by your implementation");
+
         }
     }
 }
