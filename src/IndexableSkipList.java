@@ -7,12 +7,25 @@ public class IndexableSkipList extends AbstractSkipList {
 
     @Override
     public Node find(int val) {
-        throw new UnsupportedOperationException("Replace this by your implementation");
+        Node p = head;
+        for (int i = head.height(); i>0; i--) {
+            while(p.getNext(i)!=null && p.getNext(i).key()<=val) {
+                p  = p.getNext(i);
+            }
+        }
+        return p;
     }
 
     @Override
     public int generateHeight() {
-        throw new UnsupportedOperationException("Replace this by your implementation");
+        int hight=0;
+        double random = Math.random();
+        while(random<=probability)
+        {
+            hight++;
+            random = Math.random();
+        }
+        return hight;
     }
 
     public int rank(int val) {
