@@ -2,9 +2,10 @@ public class SkipListExperimentUtils {
 
     public static double measureLevels(double p, int x) {
         AbstractSkipList list = new IndexableSkipList(p);
-        int sum = 0;
+        double sum = 0;
         for (int i = 0; i < x; i++) {
-            sum += list.generateHeight();
+            int h = list.generateHeight();
+            sum += h;
         }
         return (double) (sum/x)+1;
     }

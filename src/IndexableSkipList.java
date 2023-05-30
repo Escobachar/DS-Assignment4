@@ -20,7 +20,7 @@ public class IndexableSkipList extends AbstractSkipList {
     public int generateHeight() {
         int hight=0;
         double random = Math.random();
-        while(random<=probability)
+        while(random>=probability)
         {
             hight++;
             random = Math.random();
