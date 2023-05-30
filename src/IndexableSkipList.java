@@ -8,9 +8,9 @@ public class IndexableSkipList extends AbstractSkipList {
     @Override
     public Node find(int val) {
         Node p = head;
-        for (int i = head.height(); i>0; i--) {
+        for (int i = head.height(); i >= 0; i--) {
             while(p.getNext(i)!=null && p.getNext(i).key()<=val) {
-                p  = p.getNext(i);
+                p = p.getNext(i);
             }
         }
         return p;
