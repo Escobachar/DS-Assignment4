@@ -28,7 +28,7 @@ public class SkipListExperimentUtils {
      * 6. Return the DS and the difference between the times from 3 and 5.
      */
     public static Pair<AbstractSkipList, Double> measureInsertions(double p, int size) {
-        AbstractSkipList DS = new IndexableSkipList(size+1);
+        AbstractSkipList DS = new IndexableSkipList(p);
         Integer[] arr = new Integer[size+1];
         for (int i = 0; i < arr.length; i++) {
             arr[i] = 2*i;
@@ -38,17 +38,19 @@ public class SkipListExperimentUtils {
         List<Integer> intList = Arrays.asList(arr);
         Collections.shuffle(intList);
         intList.toArray(arr);
-
-        double begin = System.nanoTime();
+        double totalTime = 0.0;
 
         //insertion
         for (int x:arr) {
+            double startTime = System.nanoTime();
             DS.insert(x);
+            double endTime = System.nanoTime();
+            totalTime += (endTime - startTime);
         }
-        double end = System.nanoTime();
+
         //calculating the time
-        double seconds = end-begin;
-        return new Pair<>(DS,seconds/(size+1));
+        double avgTime = totalTime / arr.length;
+        return new Pair<>(DS,avgTime);
     }
 
     public static double measureSearch(AbstractSkipList skipList, int size) {
@@ -61,28 +63,25 @@ public class SkipListExperimentUtils {
         List<Integer> intList = Arrays.asList(arr);
         Collections.shuffle(intList);
         intList.toArray(arr);
-
-        double begin = System.nanoTime();
+        double totalTime = 0.0;
 
         //search
         for (int x:arr) {
+            double startTime = System.nanoTime();
             skipList.search(x);
+            double endTime = System.nanoTime();
+            totalTime += (endTime - startTime);
         }
-        double end = System.nanoTime();
-        //calculating the time
-        double seconds = end-begin;
-        double avg = seconds/(2*size+1);
-        return avg;
+
+        //calculating the time;
+        double avgTime = totalTime/arr.length;
+        return avgTime;
     }
 
     public static double measureDeletions(AbstractSkipList skipList, int size) {
         Integer[] arr = new Integer[size+1];
         for (int i = 0; i < arr.length; i++) {
             arr[i] = 2*i;
-        }
-        AbstractSkipList.Node[] arrPointers = new IndexableSkipList.Node[size+1];
-        for (int i = 0; i < arr.length; i++) {
-            arrPointers[i] = skipList.search(arr[i]);
         }
 
         //shuffle the array
@@ -91,61 +90,38 @@ public class SkipListExperimentUtils {
         Collections.shuffle(intList);
         intList.toArray(arr);
 
-        double begin = System.nanoTime();
-
+        double totalTime = 0.0;
 
         //Deletion
-        for (int i = 0; i < arr.length; i++) {
-            skipList.delete(arrPointers[i]);
+        for (int i = 0 ; i < arr.length ; i++)
+        {
+            AbstractSkipList.Node toDelete = skipList.find(arr[i]);
+            double startTime = System.nanoTime();
+            skipList.delete(toDelete);
+            double endTime = System.nanoTime();
+            totalTime += (endTime - startTime);
         }
-        double end = System.nanoTime();
-        //calculating the time
-        double seconds = end-begin;
-        double avg = seconds/(2*size+1);
-        return avg;
+
+        //calculating the time;
+        double avgTime = totalTime/arr.length;
+        return avgTime;
     }
 
     public static void main(String[] args) {
-        //        test2:
 
-        int size = 2500;
-        double p = 0.33;
-        double InsertionTime=0, SearchTime=0, DeletionTime=0;
-        for (int n = 0; n <30; n++) {
-            Pair pair = measureInsertions(p,size);
-            AbstractSkipList skipList = (IndexableSkipList)pair.first();
-            //System.out.println(skipList.toString());
-            double AverageInsertionTime = (double)pair.second();
-            double AverageSearchTime = measureSearch(skipList,size);
-            double AverageDeletionTime = measureDeletions(skipList,size);
-            //System.out.println(skipList.toString());
-            InsertionTime+=AverageInsertionTime;
-            SearchTime+=AverageSearchTime;
-            DeletionTime+=AverageDeletionTime;
-        }
-        InsertionTime/=30;
-        SearchTime/=30;
-        DeletionTime/=30;
-        System.out.println("InsertionTime: " + InsertionTime +
-                "\nSearchTime: " + SearchTime +
-                "\nDeletionTime: " + DeletionTime);
-
-
-        //        test1:
-        /*
-        int[] x = {10,100,1000,10000};
         double[] p = {0.33,0.5,0.75,0.9};
-            for (int i = 0; i < x.length ; i++) {
-                for (int j = 0; j < p.length; j++) {
-                    double avg = measureLevels(p[j],x[i]);
-                    int expected = (int)(1/p[j]);
-                    System.out.println("x = " + x[i] + " p = " + p[j] +
-                            " average levels: " + avg +
-                            " expected: " + expected +
-                            " delta: " + Math.abs(avg-expected));
+        for(double i:p) {
+            System.out.println("p=" + i);
+            for (int m = 1; m <= 4; m++) {
+                System.out.println("x=" + Math.pow(10, m));
+                for (int j = 0; j < 5; j++) {
+                    System.out.println("#" + (j + 1));
+                    System.out.println(measureLevels(i, (int) Math.pow(10, m)));
                 }
-                System.out.println();
+
             }
-         */
+        }
     }
+
+
 }
