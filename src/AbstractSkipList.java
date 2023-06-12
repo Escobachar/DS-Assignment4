@@ -1,6 +1,7 @@
 import java.util.NoSuchElementException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 abstract public class AbstractSkipList {
     final protected Node head;
@@ -12,7 +13,8 @@ abstract public class AbstractSkipList {
         head = new Node(Integer.MIN_VALUE);
         tail = new Node(Integer.MAX_VALUE);
         increaseHeight();
-        this.defaultLength=0;
+        this.defaultLength=1;
+        head.setLength(head.height,defaultLength);
     }
 
     public void increaseHeight() {
@@ -32,10 +34,7 @@ abstract public class AbstractSkipList {
     }
 
     public Node insert(int key) {
-        //
-        int sum=0;
-        int nextLevel=0;
-        //
+        int sum=1;
         int nodeHeight = generateHeight();
 
         while (nodeHeight > head.height()) {
@@ -54,53 +53,50 @@ abstract public class AbstractSkipList {
             newNode.addLevel(nextNode, prevNode);
             prevNode.setNext(level, newNode);
             nextNode.setPrev(level, newNode);
-            //
-            newNode.setLength(level,prevNode.getLength(level)+1-sum);
+
+
+            newNode.setLength(level, prevNode.getLength(level) + 1 - sum);
             prevNode.setLength(level,sum);
-            //
             while (prevNode != null && prevNode.height() == level) {
-                //
-                sum+=prevNode.getLength(level);
-                //
+                sum+=prevNode.length.get(level);
                 prevNode = prevNode.getPrev(level);
 
             }
         }
-        //
-        while(nextLevel<=head.height()) {
-            nextLevel++;
-            if (prevNode.height() >= nextLevel) {
-                prevNode.setLength(nextLevel,prevNode.getLength(nextLevel)+1);
-            } else {
-                while (prevNode != null && prevNode.height() < nextLevel) {
-                    prevNode = prevNode.getPrev(nextLevel - 1);
-                }
-                if (prevNode != null)
-                    prevNode.setLength(nextLevel, prevNode.getLength(nextLevel) + 1);
+        for (int level = nodeHeight; level < head.height; level++)
+
+        {
+            while (prevNode != null && prevNode.height() == level) {
+                prevNode = prevNode.getPrev(level);
             }
+            prevNode.setLength(level+1, prevNode.getLength(level+1)+1);
         }
         this.defaultLength++;
-        //
         return newNode;
     }
 
     public boolean delete(Node node) {
-        //
+        Node prev= node.getPrev(0);
         if (find(node.key).key != node.key || find(node.key)== head ) {
             return false;
         }
-        //
+
         for (int level = 0; level <= node.height(); ++level) {
-            Node prev = node.getPrev(level);
+             prev = node.getPrev(level);
             Node next = node.getNext(level);
             prev.setNext(level, next);
             next.setPrev(level, prev);
-            //
             prev.setLength(level,prev.getLength(level)+node.getLength(level));
             while (prev != null && prev.height() == level) {
                 prev = prev.getPrev(level);
             }
-            //
+
+        }
+        for (int level = node.height(); level <= head.height(); ++level) {
+            while (prev != null && prev.height() == level) {
+                prev = prev.getPrev(level);
+            }
+            prev.setLength(level+1,prev.getLength(level+1)-1);
         }
 
         return true;
@@ -132,11 +128,12 @@ abstract public class AbstractSkipList {
 
     private void levelToString(StringBuilder s, int level) {
         s.append("H    ");
+        s.append("-" + head.length.get(level) + "-");
         Node curr = head.getNext(level);
 
         while (curr != tail) {
-            s.append(curr.key);
-            s.append("    ");
+            s.append("|" + curr.key + "|");
+            s.append("-"+curr.length.get(level) + "-");
             
             curr = curr.getNext(level);
         }
@@ -230,7 +227,6 @@ abstract public class AbstractSkipList {
             }
             return this.length.get(level);
         }
-
 
     }
 }

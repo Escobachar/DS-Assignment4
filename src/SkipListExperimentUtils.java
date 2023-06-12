@@ -107,21 +107,6 @@ public class SkipListExperimentUtils {
         return avgTime;
     }
 
-    public static void main(String[] args) {
-
-        double[] p = {0.33,0.5,0.75,0.9};
-        for(double i:p) {
-            System.out.println("p=" + i);
-            for (int m = 1; m <= 4; m++) {
-                System.out.println("x=" + Math.pow(10, m));
-                for (int j = 0; j < 5; j++) {
-                    System.out.println("#" + (j + 1));
-                    System.out.println(measureLevels(i, (int) Math.pow(10, m)));
-                }
-
-            }
-        }
-    }
 
 
 }
