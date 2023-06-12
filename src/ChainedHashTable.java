@@ -1,6 +1,4 @@
 import java.util.Iterator;
-import java.util.List;
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class ChainedHashTable<K, V> implements HashTable<K, V> {
@@ -34,20 +32,20 @@ public class ChainedHashTable<K, V> implements HashTable<K, V> {
 
     public V search(K key) {
         int index = hashFunc.hash(key);
-        Iterator iter = arr[index].iterator();
+        Iterator<Pair<K, V>> iter = arr[index].iterator();
         while(iter.hasNext()){
-            Pair temp = (Pair)iter.next();
+            Pair<K,V> temp = iter.next();
             if(temp.first() == key)
                 return (V)temp.second();
         }
         return null;
     }
 
-    private Pair search(K key, int diff){ //diff is not used, just for a different signature for compilation
+    private Pair<K,V> searchPair(K key){
         int index = hashFunc.hash(key);
-        Iterator iter = arr[index].iterator();
+        Iterator<Pair<K, V>> iter = arr[index].iterator();
         while(iter.hasNext()){
-            Pair temp = (Pair)iter.next();
+            Pair<K,V> temp = iter.next();
             if(temp.first() == key)
                 return temp;
         }
@@ -55,23 +53,14 @@ public class ChainedHashTable<K, V> implements HashTable<K, V> {
     }
 
     public void insert(K key, V value) {
-        if((size+1)/capacity < maxLoadFactor) {
-            arr[hashFunc.hash(key)].add(new Pair(key, value));
+        if((double) (size + 1) /capacity < maxLoadFactor) {
+            arr[hashFunc.hash(key)].add(new Pair<K,V>(key, value));
             size++;
         }
         else{
             rehash(key, value);
         }
 
-    }
-    private void insert(Pair pair){
-        if((size+1)/capacity < maxLoadFactor) {
-            arr[hashFunc.hash((K)pair.first())].add(new Pair(pair.first(), pair.second()));
-            size++;
-        }
-        else{
-            rehash((K)pair.first(), (V)pair.second());
-        }
     }
 
     private void rehash(K key, V value){
@@ -80,6 +69,7 @@ public class ChainedHashTable<K, V> implements HashTable<K, V> {
         for (int i = 0; i < arr.length; i++) {
             arr[i] = new LinkedList<>();
         }
+        this.k = k+1;
         this.capacity = capacity * 2;
         this.hashFunc = hashFactory.pickHash(k);
         for (LinkedList<Pair<K,V>> pairs : temp) {
@@ -87,12 +77,17 @@ public class ChainedHashTable<K, V> implements HashTable<K, V> {
                 arr[hashFunc.hash((K) pair.first())].add(pair);
             }
         }
+        insert(key,value);
     }
 
     public boolean delete(K key) {
-        Pair temp = search(key,0);
-        if(temp != null)
-            return arr[hashFunc.hash(key)].remove(temp);
+        int index = hashFunc.hash(key);
+        for (Pair<K,V> pair : arr[index] ) {
+            if(pair.first() == key){
+                arr[index].remove(pair);
+                return true;
+            }
+        }
         return false;
     }
 
