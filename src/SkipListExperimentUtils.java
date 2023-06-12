@@ -110,7 +110,7 @@ public class SkipListExperimentUtils {
     public static void main(String[] args) {
 
         double[] p = {0.33,0.5,0.75,0.9};
-        for(double i:p) {x`
+        for(double i:p) {
             System.out.println("p=" + i);
             for (int m = 1; m <= 4; m++) {
                 System.out.println("x=" + Math.pow(10, m));
