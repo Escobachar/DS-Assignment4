@@ -7,39 +7,54 @@ public class MyDataStructure {
      * Remember that all the data-structures you use must be YOUR implementations,
      * except for the List and its implementation for the operation Range(low, high).
      */
+    private final int N;
+    private ChainedHashTable table;
+    private IndexableSkipList skipList;
+    private HashFactory<Integer> factory;
 
     /***
      * This function is the Init function described in Part 4.
      *
      * @param N The maximal number of items expected in the DS.
      */
-    public MyDataStructure(int N) {}
-
+    public MyDataStructure(int N) {
+        this.N = N;
+        this.factory = new ModularHash();
+        this.table = new ChainedHashTable(factory);
+        this.skipList = new IndexableSkipList(0.5);
+    }
     /*
      * In the following functions,
      * you should REMOVE the place-holder return statements.
      */
     public boolean insert(int value) {
-        return false;
+        if(skipList.insert(value) == null)
+            return false;
+        table.insert(value, value);
+        return true;
     }
 
     public boolean delete(int value) {
+        if(table.delete(value)){
+            skipList.delete(skipList.find(value));
+            return true;
+        }
         return false;
     }
 
     public boolean contains(int value) {
-        return false;
+        return table.search(value) != null;
     }
 
     public int rank(int value) {
-        return -1;
+        return skipList.rank(value);
     }
 
     public int select(int index) {
-        return Integer.MIN_VALUE;
+        return skipList.select(index);
     }
 
     public List<Integer> range(int low, int high) {
-        return null;
+
     }
 }
