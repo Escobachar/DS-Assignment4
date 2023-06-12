@@ -39,7 +39,7 @@ public class ProbingHashTable<K, V> implements HashTable<K, V> {
                 return arr[slot].second();
             }
             else{
-                slot = HashingUtils.mod(slot +1, capacity);
+                slot = HashingUtils.mod(slot + 1, capacity);
             }
         }
         return null;
@@ -53,7 +53,7 @@ public class ProbingHashTable<K, V> implements HashTable<K, V> {
             else if (arr[slot].first() == key) {
                 return slot;
             }
-            else {
+            else{
                 slot = HashingUtils.mod(slot + 1, capacity);
             }
         }
@@ -61,7 +61,7 @@ public class ProbingHashTable<K, V> implements HashTable<K, V> {
     }
 
     public void insert(K key, V value) {
-        if((size+1)/capacity < maxLoadFactor){
+        if((double) (size + 1) /capacity < maxLoadFactor){
             int slot = hashFunc.hash(key);
             for (int i = 0; i < arr.length; i++) {
                 if(arr[slot] == null){
@@ -81,12 +81,15 @@ public class ProbingHashTable<K, V> implements HashTable<K, V> {
 
     private void rehash(K key, V value){
         Pair<K,V>[] temp = arr;
+        this.k = k+1;
         this.arr = new Pair[capacity * 2];
         this.capacity = capacity * 2;
         this.hashFunc = hashFactory.pickHash(k);
         for (Pair<K,V> pair : temp) {
-            insert(pair.first(),pair.second());
+            if (pair != null && pair.first() != null && pair.second() != null)
+                insert(pair.first(), pair.second());
         }
+        insert(key,value);
     }
 
     public boolean delete(K key) {
