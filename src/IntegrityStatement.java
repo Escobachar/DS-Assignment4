@@ -13,8 +13,7 @@ public class IntegrityStatement {
          *  proceedings will be taken against me before the BGU Disciplinary Committee if there is any suspicion that my
          *  work contains code/answers that is not my own".
          */
-        return "Yuval Bachar and Itay Tavori";
-
+        return "Itay Tavori and Yuval Bachar";
         /*
          *  If you have relied on or used an external source such as shared file drivers,
          *  Large Language Models (LLMs) including ChatGPT, forums, websites, books, etc.
