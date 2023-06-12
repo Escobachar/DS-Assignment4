@@ -29,20 +29,20 @@ public class IndexableSkipList extends AbstractSkipList {
     }
 
     public int rank(int val) {
-        Node pos = head;
+        if(find(val).key()!=val)
+            return -1;
+        Node curr = head;
         int rank = 0;
-        for (int i= pos.height(); i >=0; i--) {
-            while((pos.getNext(i)!=null )&&(pos.getNext(i).key()<=val))
+        for (int level= curr.height(); level >=0; level--) {
+            while((curr.getNext(level)!=null )&&(curr.getNext(level).key()<=val))
             {
-                rank+= pos.getLength(i);
-                pos = pos.getNext(i);
+                rank+= curr.getLength(level);
+                curr = curr.getNext(level);
             }
-            if(pos.key()==val)
+            if(curr.key()==val)
             {
-                break;
+                return rank;
             }
-
-
         }
         return rank;
     }
@@ -67,5 +67,19 @@ public class IndexableSkipList extends AbstractSkipList {
         }
 
         return pos.key();
+    }
+
+
+    public static void main(String[] args) {
+        IndexableSkipList skiplist = new IndexableSkipList(0.5);
+        for (int i = 0; i <10 ; i++) {
+           skiplist.insert(5*i);
+        }
+        System.out.println(skiplist);
+
+        skiplist.delete(skiplist.find(10));
+
+        System.out.println(skiplist);
+
     }
 }
