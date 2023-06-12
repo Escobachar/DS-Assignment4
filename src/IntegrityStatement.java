@@ -14,7 +14,6 @@ public class IntegrityStatement {
          *  work contains code/answers that is not my own".
          */
         return "Itay Tavori and Yuval Bachar";
-
         /*
          *  If you have relied on or used an external source such as shared file drivers,
          *  Large Language Models (LLMs) including ChatGPT, forums, websites, books, etc.
